@@ -210,14 +210,11 @@ export default function DigitalTwinChat() {
           </div>
 
           <div className="glass-card rounded-3xl p-4 md:p-6 h-full flex flex-col min-h-[640px] max-h-[80vh] overflow-hidden">
-            <div className="flex items-center justify-between gap-3 px-2 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <div className="flex items-center gap-3 px-2 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
               <div className="flex items-center gap-2">
                 <FiMessageCircle size={16} style={{ color: "var(--accent-blue)" }} />
                 <span className="text-sm font-semibold">Live conversation</span>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(0,212,255,0.08)", color: "var(--accent-blue)" }}>
-                Model: openai/gpt-oss-120b
-              </span>
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto py-4 pr-1 space-y-4">
