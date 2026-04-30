@@ -90,7 +90,7 @@ export default function ChatbotWidget() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.3, opacity: 0, y: 20 }}
               transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
-              className="absolute bottom-20 right-0 w-96 h-[500px] bg-gradient-to-br from-[rgba(13,13,31,0.95)] to-[rgba(13,13,31,0.85)] backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-[rgba(0,212,255,0.3)] flex flex-col"
+              className="absolute bottom-20 right-0 w-[450px] h-[350px] bg-gradient-to-br from-[rgba(13,13,31,0.95)] to-[rgba(13,13,31,0.85)] backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-[rgba(0,212,255,0.3)] flex flex-col"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] p-4 flex items-center justify-between flex-shrink-0">
