@@ -15,24 +15,26 @@ const MODEL = "openai/gpt-oss-120b";
 export const runtime = "nodejs";
 
 function getGroqApiKey() {
+  // First try process.env directly (works on Vercel)
   if (process.env.GROQ_API_KEY) {
     return process.env.GROQ_API_KEY;
   }
 
-  const rootEnvPath = path.resolve(process.cwd(), "..", ".env");
-
-  if (!existsSync(rootEnvPath)) {
-    return null;
+  // Fallback: try to read from .env file (for local dev)
+  try {
+    const rootEnvPath = path.resolve(process.cwd(), "..", ".env");
+    if (existsSync(rootEnvPath)) {
+      const envFile = readFileSync(rootEnvPath, "utf8");
+      const match = envFile.match(/^GROQ_API_KEY\s*=\s*(.+)$/m);
+      if (match?.[1]) {
+        return match[1].trim().replace(/^['"]|['"]$/g, "");
+      }
+    }
+  } catch (err) {
+    // Silently fail and return null if file read fails
   }
 
-  const envFile = readFileSync(rootEnvPath, "utf8");
-  const match = envFile.match(/^GROQ_API_KEY\s*=\s*(.+)$/m);
-
-  if (!match?.[1]) {
-    return null;
-  }
-
-  return match[1].trim().replace(/^['"]|['"]$/g, "");
+  return null;
 }
 
 export async function POST(request: Request) {
@@ -92,9 +94,22 @@ export async function POST(request: Request) {
     );
   }
 
-  const data = (await response.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
+  let data: { choices?: Array<{ message?: { content?: string } }> } = {};
+
+  try {
+    data = (await response.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+  } catch (parseError) {
+    const errorText = await response.text();
+    return NextResponse.json(
+      {
+        error: "Failed to parse Groq response as JSON.",
+        details: `Response might be HTML error page: ${errorText.slice(0, 300)}`,
+      },
+      { status: 502 },
+    );
+  }
 
   const content = data.choices?.[0]?.message?.content?.trim();
 
