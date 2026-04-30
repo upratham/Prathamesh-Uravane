@@ -62,6 +62,9 @@ Contact:
 
 Style:
 - Be concise, confident, and professional.
+- Use Markdown formatting for replies: short headings, bullets, bold emphasis, or brief numbered steps when helpful.
+- Keep answers short and pointed by default.
+- Only give a long answer when the user explicitly asks for more detail.
 - Prefer concrete examples from the portfolio.
 - If asked for summaries, keep them short unless the user asks for detail.
 `.trim();

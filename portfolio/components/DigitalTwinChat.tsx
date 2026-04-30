@@ -2,6 +2,8 @@
 
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { FiArrowUpRight, FiCpu, FiLoader, FiMessageCircle, FiSend, FiUser } from "react-icons/fi";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import EmailAction from "@/components/EmailAction";
 import { digitalTwinProfile, digitalTwinSuggestions } from "@/lib/digitalTwin";
@@ -10,6 +12,45 @@ type ChatMessage = {
   role: "assistant" | "user";
   content: string;
 };
+
+function AssistantMarkdown({ content }: { content: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        p: ({ children }) => <p className="m-0 leading-relaxed">{children}</p>,
+        ul: ({ children }) => <ul className="m-0 space-y-1 pl-5 list-disc">{children}</ul>,
+        ol: ({ children }) => <ol className="m-0 space-y-1 pl-5 list-decimal">{children}</ol>,
+        li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+        strong: ({ children }) => <strong className="font-semibold text-[var(--foreground)]">{children}</strong>,
+        em: ({ children }) => <em className="italic">{children}</em>,
+        code: ({ children }) => (
+          <code
+            className="rounded px-1.5 py-0.5 font-mono text-[0.85em]"
+            style={{ background: "rgba(0,212,255,0.08)", color: "var(--accent-blue)" }}
+          >
+            {children}
+          </code>
+        ),
+        h1: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
+        h2: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
+        h3: ({ children }) => <h4 className="m-0 text-sm font-semibold">{children}</h4>,
+        a: ({ children, href }) => (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="text-[var(--accent-blue)] underline underline-offset-2">
+            {children}
+          </a>
+        ),
+        blockquote: ({ children }) => (
+          <blockquote className="m-0 border-l-2 pl-3 italic" style={{ borderColor: "rgba(0,212,255,0.3)" }}>
+            {children}
+          </blockquote>
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+}
 
 const initialMessages: ChatMessage[] = [
   {
@@ -195,7 +236,7 @@ export default function DigitalTwinChat() {
                       color: "var(--foreground)",
                     }}
                   >
-                    {message.content}
+                    {message.role === "assistant" ? <AssistantMarkdown content={message.content} /> : message.content}
                   </div>
                   {message.role === "user" && (
                     <div className="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0" style={{ background: "rgba(124,58,237,0.15)", color: "#a78bfa" }}>
