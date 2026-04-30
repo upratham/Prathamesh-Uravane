@@ -41,15 +41,6 @@ export default function Hero() {
         />
       ))}
 
-      {/* Scan line */}
-      <div
-        className="absolute left-0 right-0 h-px pointer-events-none"
-        style={{
-          background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.3), transparent)",
-          top: "30%",
-        }}
-      />
-
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-16">
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
           {/* Left - Text Content */}
