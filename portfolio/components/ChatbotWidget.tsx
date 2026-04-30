@@ -10,12 +10,151 @@ interface Message {
   timestamp: Date;
 }
 
+// Prathamesh's knowledge base
+const PRATHAMESH_CONTEXT = {
+  name: "Prathamesh Uravane",
+  title: "AI Engineer & ML Researcher",
+  education: "MS in Applied ML at University of Maryland (GPA 4.0)",
+  location: "DC/Maryland",
+  status: "Actively seeking Summer 2026 internships",
+  
+  expertise: {
+    aiAgents: ["LangChain", "LangGraph", "OpenAI Agents SDK", "RAG Pipelines"],
+    ml: ["TensorFlow", "PyTorch", "scikit-learn", "HuggingFace"],
+    cv: ["OpenCV", "Pose Estimation", "Medical Imaging", "GANs"],
+    backend: ["FastAPI", "Flask", "Docker", "AWS"],
+    llms: ["GPT-4", "Prompt Engineering", "ChromaDB", "Vector Databases"],
+    frontend: ["Next.js", "TypeScript", "React"],
+    data: ["Pandas", "NumPy", "SQL", "PostgreSQL"],
+  },
+
+  projects: [
+    {
+      name: "InsureLLM",
+      description: "RAG-Powered AI Agent for Business Knowledge Automation",
+      details: "Built RAG agent for InsureTech company with MRR 0.875 on 150 test cases, 95.7% accuracy",
+      tech: ["LangChain", "ChromaDB", "OpenAI GPT-4", "Python"],
+    },
+    {
+      name: "MediNotes AI",
+      description: "Clinical Documentation Automation SaaS",
+      details: "Full-stack SaaS automating medical documentation with real-time streaming, JWT auth, Clerk billing",
+      tech: ["FastAPI", "Next.js", "OpenAI", "Docker", "AWS"],
+    },
+    {
+      name: "Vehicle Predictive Maintenance",
+      description: "MLOps Pipeline with Auto-Retraining",
+      details: "End-to-end predictive analytics with CI/CD triggers, DVC versioning, MLflow tracking",
+      tech: ["Python", "DVC", "MLflow", "FastAPI", "Docker"],
+    },
+    {
+      name: "Student Attentiveness Monitor",
+      description: "Real-time Computer Vision Agent",
+      details: "70% reduction in manual review time using face detection and facial landmark analysis",
+      tech: ["OpenCV", "Python", "FastAPI"],
+    },
+  ],
+
+  research: "5 peer-reviewed papers in IEEE/Elsevier on AI, computer vision, and healthcare",
+  
+  strengths: [
+    "Full-stack ML: from data pipelines to production APIs",
+    "Building production-ready AI systems, not notebooks",
+    "RAG systems and LLM agents",
+    "Clinical/Healthcare AI applications",
+    "Computer vision and medical imaging",
+    "Production deployment with Docker and AWS",
+  ],
+
+  experience: "Worked across India, Singapore (NTU), and Peru (UMA) in global teams",
+  
+  contact: "upratham2002@gmail.com",
+};
+
+// Generate contextual responses
+const generateResponse = (userMessage: string): string => {
+  const lowerMessage = userMessage.toLowerCase();
+
+  // Greeting
+  if (
+    lowerMessage.match(/^(hey|hi|hello|greetings|good (morning|afternoon|evening))/)
+  ) {
+    return `Hey! 👋 I'm Prathamesh's AI assistant. Feel free to ask me anything about his ${PRATHAMESH_CONTEXT.title} background, projects, skills, or experience! What interests you?`;
+  }
+
+  // Skills/Expertise queries
+  if (
+    lowerMessage.match(
+      /skills|expertise|good at|capable of|can ?(you|he) do|what (can|do) ?(you|he)/
+    )
+  ) {
+    if (lowerMessage.match(/ai|agents|rag|llm|language model/)) {
+      return `Prathamesh is expert in AI agents and LLMs! 🤖 He specializes in LangChain, RAG pipelines, OpenAI integration, and building production LLM applications. He built InsureLLM - a RAG agent achieving 95.7% accuracy on business queries!`;
+    }
+    if (lowerMessage.match(/machine learning|ml|deep learning|models|training/)) {
+      return `He's strong in ML! 🧠 TensorFlow, PyTorch, scikit-learn, HuggingFace - you name it. Built predictive maintenance systems, medical imaging CNNs (96% accuracy), and data-driven analytics pipelines.`;
+    }
+    if (lowerMessage.match(/computer vision|cv|image|video|detection|recognition/)) {
+      return `Computer vision is his strength! 👁️ OpenCV expert, facial recognition, pose estimation, medical imaging. Built real-time student attentiveness monitoring system reducing manual review by 70%.`;
+    }
+    if (lowerMessage.match(/backend|devops|deployment|docker|aws|production/)) {
+      return `He's a full-stack engineer! 🚀 FastAPI expert, Docker containerization, AWS deployment, CI/CD pipelines. All his projects go from prototype to production-ready systems.`;
+    }
+    return `Prathamesh excels at building full-stack production AI systems! 💪 AI Agents, ML pipelines, Computer Vision, Backend engineering, and DevOps. Which area interests you most?`;
+  }
+
+  // Project queries
+  if (lowerMessage.match(/projects?|built|work|portfolio|experience/)) {
+    if (lowerMessage.match(/insurellm|insurance|rag|knowledge|business/)) {
+      return `InsureLLM was a great RAG project! 🎯 It automated employee access to insurance policies and contracts using semantic search + re-ranking. Achieved MRR of 0.875 on 150 business test cases with 95.7% keyword coverage. Tech: LangChain, ChromaDB, GPT-4.`;
+    }
+    if (lowerMessage.match(/medinotes|medical|clinical|health|doctor|documentation/)) {
+      return `MediNotes AI is a full-cycle SaaS product! 🏥 Automates clinical documentation - doctors input notes, get AI-generated summaries, action items, and patient emails via real-time streaming. Built with FastAPI, Next.js, OpenAI, Clerk billing on AWS.`;
+    }
+    if (lowerMessage.match(/vehicle|maintenance|predictive|mlops|data drift/)) {
+      return `Vehicle Predictive Maintenance showcases MLOps! 🔧 End-to-end pipeline predicting failures with automated retraining on data drift. Uses DVC versioning, MLflow tracking, FastAPI REST API, all Dockerized on AWS.`;
+    }
+    if (lowerMessage.match(/student|attentive|education|video|monitoring/)) {
+      return `Student Attentiveness Monitor used real-time CV! 📹 Face detection + facial landmarks to assess attention during remote classes. 70% reduction in manual review time. Multi-threaded OpenCV pipeline.`;
+    }
+    return `Prathamesh has built impressive projects! 🏆 InsureLLM (RAG agent), MediNotes AI (clinical SaaS), Vehicle Predictive Maintenance (MLOps), and more. Want details on any specific project?`;
+  }
+
+  // Research/Publications
+  if (lowerMessage.match(/research|paper|published|ieee|elsevier|citation/)) {
+    return `Prathamesh is a published researcher! 📚 5 peer-reviewed papers in IEEE/Elsevier spanning healthcare AI, computer vision, and predictive analytics. His work bridges academic rigor with production systems.`;
+  }
+
+  // Education
+  if (lowerMessage.match(/education|degree|university|umd|maryland|gpa|school/)) {
+    return `Prathamesh is pursuing an MS in Applied ML at University of Maryland, College Park with a 4.0 GPA! 🎓 He's actively seeking Summer 2026 internships in AI/ML engineering roles.`;
+  }
+
+  // Experience/Background
+  if (lowerMessage.match(/experience|background|history|where|worked|location/)) {
+    return `He has global experience! 🌍 Worked across India, Singapore (NTU), and Peru (UMA) in cross-cultural ML/AI teams. Based in DC/Maryland. His diverse background gives him unique perspective on production AI systems.`;
+  }
+
+  // Contact/Hiring
+  if (lowerMessage.match(/contact|email|hire|internship|opportunity|job|reach/)) {
+    return `Great interest! 🎯 You can reach Prathamesh at ${PRATHAMESH_CONTEXT.contact} or through the Contact section below. He's actively seeking Summer 2026 internships in production ML/AI roles.`;
+  }
+
+  // Healthcare/Medical AI
+  if (lowerMessage.match(/health|medical|clinical|hospital|patient|imaging|mri/)) {
+    return `Prathamesh is passionate about Healthcare AI! 🏥 He built MediNotes AI (clinical documentation), medical imaging CNNs, and researches health informatics. His healthcare AI systems handle real-world clinical workflows.`;
+  }
+
+  // Default helpful response
+  return `That's an interesting question! 💭 I'm here to tell you about Prathamesh's AI/ML expertise, projects, research, and experience. Feel free to ask about his skills, specific projects, education, or how to work with him!`;
+};
+
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hey! 👋 I'm Prathamesh's Digital Twin. Let's chat about AI, ML, or anything cool you'd like to discuss!",
+      text: `Hey! 👋 I'm Prathamesh's Digital Twin. I have access to his background, projects, and expertise. Ask me anything about his AI/ML work, skills, projects, or experience!`,
       sender: "bot",
       timestamp: new Date(),
     },
@@ -36,7 +175,10 @@ export default function ChatbotWidget() {
   // Close chat when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (chatContainerRef.current && !chatContainerRef.current.contains(event.target as Node)) {
+      if (
+        chatContainerRef.current &&
+        !chatContainerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -63,29 +205,20 @@ export default function ChatbotWidget() {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate bot response delay
+    // Generate contextual bot response
     setTimeout(() => {
-      const botResponses = [
-        "That's a great question! Let me think about that... 🤔",
-        "Interesting! I love discussing that topic. 💡",
-        "You know, that's something Prathamesh is really passionate about! 🚀",
-        "Great point! We should explore that more. 👍",
-        "I completely agree with you on that! 🎯",
-        "Feel free to contact Prathamesh directly for more detailed discussions! 📧",
-      ];
-      const randomResponse =
-        botResponses[Math.floor(Math.random() * botResponses.length)];
+      const botResponse = generateResponse(inputValue);
 
       const botMessage: Message = {
-        id: Date.now().toString(),
-        text: randomResponse,
+        id: (Date.now() + 1).toString(),
+        text: botResponse,
         sender: "bot",
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-    }, 800);
+    }, 600);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -106,7 +239,11 @@ export default function ChatbotWidget() {
               initial={{ scale: 0.3, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.3, opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+              transition={{
+                duration: 0.3,
+                type: "spring",
+                stiffness: 300,
+              }}
               className="absolute bottom-20 right-0 w-[450px] h-[350px] bg-gradient-to-br from-[rgba(13,13,31,0.95)] to-[rgba(13,13,31,0.85)] backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-[rgba(0,212,255,0.3)] flex flex-col"
             >
               {/* Header */}
@@ -123,9 +260,7 @@ export default function ChatbotWidget() {
                     <p className="text-sm font-bold text-white">
                       Prathamesh's AI
                     </p>
-                    <p className="text-xs text-white/80">
-                      Always online
-                    </p>
+                    <p className="text-xs text-white/80">Digital Twin</p>
                   </div>
                 </div>
                 <button
@@ -173,7 +308,10 @@ export default function ChatbotWidget() {
                       <div className="flex gap-1">
                         <motion.div
                           animate={{ y: [0, -4, 0] }}
-                          transition={{ duration: 0.6, repeat: Infinity }}
+                          transition={{
+                            duration: 0.6,
+                            repeat: Infinity,
+                          }}
                           className="w-2 h-2 rounded-full bg-[#00d4ff]"
                         />
                         <motion.div
@@ -210,7 +348,7 @@ export default function ChatbotWidget() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Type a message..."
+                    placeholder="Ask about projects, skills..."
                     className="flex-1 bg-[rgba(255,255,255,0.08)] border border-[rgba(0,212,255,0.2)] rounded-lg px-3 py-2 text-sm text-white placeholder-[rgba(255,255,255,0.5)] focus:outline-none focus:border-[rgba(0,212,255,0.5)] focus:bg-[rgba(255,255,255,0.12)] transition-all"
                   />
                   <button
@@ -232,7 +370,11 @@ export default function ChatbotWidget() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
-          transition={{ duration: 0.2, type: "spring", stiffness: 400 }}
+          transition={{
+            duration: 0.2,
+            type: "spring",
+            stiffness: 400,
+          }}
           onClick={() => setIsOpen(true)}
           className="relative group"
           aria-label="Open chatbot"
@@ -252,7 +394,10 @@ export default function ChatbotWidget() {
           {/* Notification badge */}
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+            }}
             className="absolute top-0 right-0 w-4 h-4 bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] rounded-full border-2 border-[rgba(13,13,31,0.9)] shadow-lg"
           />
 
