@@ -1,7 +1,10 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX, FiSend } from "react-icons/fi";
+import { FiCpu, FiLoader, FiSend, FiX } from "react-icons/fi";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   id: string;
@@ -10,157 +13,66 @@ interface Message {
   timestamp: Date;
 }
 
-// Prathamesh's knowledge base
-const PRATHAMESH_CONTEXT = {
-  name: "Prathamesh Uravane",
-  title: "AI Engineer & ML Researcher",
-  education: "MS in Applied ML at University of Maryland (GPA 4.0)",
-  location: "DC/Maryland",
-  status: "Actively seeking Summer 2026 internships",
-  
-  expertise: {
-    aiAgents: ["LangChain", "LangGraph", "OpenAI Agents SDK", "RAG Pipelines"],
-    ml: ["TensorFlow", "PyTorch", "scikit-learn", "HuggingFace"],
-    cv: ["OpenCV", "Pose Estimation", "Medical Imaging", "GANs"],
-    backend: ["FastAPI", "Flask", "Docker", "AWS"],
-    llms: ["GPT-4", "Prompt Engineering", "ChromaDB", "Vector Databases"],
-    frontend: ["Next.js", "TypeScript", "React"],
-    data: ["Pandas", "NumPy", "SQL", "PostgreSQL"],
+type ChatMessage = {
+  role: "assistant" | "user";
+  content: string;
+};
+
+function AssistantMarkdown({ content }: { content: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        p: ({ children }) => <p className="m-0 leading-relaxed">{children}</p>,
+        ul: ({ children }) => <ul className="m-0 space-y-1 pl-5 list-disc">{children}</ul>,
+        ol: ({ children }) => <ol className="m-0 space-y-1 pl-5 list-decimal">{children}</ol>,
+        li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+        strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+        em: ({ children }) => <em className="italic">{children}</em>,
+        code: ({ children }) => (
+          <code
+            className="rounded px-1.5 py-0.5 font-mono text-[0.85em]"
+            style={{ background: "rgba(0,212,255,0.08)", color: "#00d4ff" }}
+          >
+            {children}
+          </code>
+        ),
+        h1: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
+        h2: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
+        h3: ({ children }) => <h4 className="m-0 text-sm font-semibold">{children}</h4>,
+        a: ({ children, href }) => (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#00d4ff] underline underline-offset-2">
+            {children}
+          </a>
+        ),
+        blockquote: ({ children }) => (
+          <blockquote className="m-0 border-l-2 pl-3 italic" style={{ borderColor: "rgba(0,212,255,0.3)" }}>
+            {children}
+          </blockquote>
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+}
+
+const initialMessages: Message[] = [
+  {
+    id: "1",
+    text:
+      "Ask me anything about Prathamesh's career, projects, research, or target roles. I use the same Groq-powered digital twin backend as the main portfolio chat.",
+    sender: "bot",
+    timestamp: new Date(),
   },
-
-  projects: [
-    {
-      name: "InsureLLM",
-      description: "RAG-Powered AI Agent for Business Knowledge Automation",
-      details: "Built RAG agent for InsureTech company with MRR 0.875 on 150 test cases, 95.7% accuracy",
-      tech: ["LangChain", "ChromaDB", "OpenAI GPT-4", "Python"],
-    },
-    {
-      name: "MediNotes AI",
-      description: "Clinical Documentation Automation SaaS",
-      details: "Full-stack SaaS automating medical documentation with real-time streaming, JWT auth, Clerk billing",
-      tech: ["FastAPI", "Next.js", "OpenAI", "Docker", "AWS"],
-    },
-    {
-      name: "Vehicle Predictive Maintenance",
-      description: "MLOps Pipeline with Auto-Retraining",
-      details: "End-to-end predictive analytics with CI/CD triggers, DVC versioning, MLflow tracking",
-      tech: ["Python", "DVC", "MLflow", "FastAPI", "Docker"],
-    },
-    {
-      name: "Student Attentiveness Monitor",
-      description: "Real-time Computer Vision Agent",
-      details: "70% reduction in manual review time using face detection and facial landmark analysis",
-      tech: ["OpenCV", "Python", "FastAPI"],
-    },
-  ],
-
-  research: "5 peer-reviewed papers in IEEE/Elsevier on AI, computer vision, and healthcare",
-  
-  strengths: [
-    "Full-stack ML: from data pipelines to production APIs",
-    "Building production-ready AI systems, not notebooks",
-    "RAG systems and LLM agents",
-    "Clinical/Healthcare AI applications",
-    "Computer vision and medical imaging",
-    "Production deployment with Docker and AWS",
-  ],
-
-  experience: "Worked across India, Singapore (NTU), and Peru (UMA) in global teams",
-  
-  contact: "upratham2002@gmail.com",
-};
-
-// Generate contextual responses
-const generateResponse = (userMessage: string): string => {
-  const lowerMessage = userMessage.toLowerCase();
-
-  // Greeting
-  if (
-    lowerMessage.match(/^(hey|hi|hello|greetings|good (morning|afternoon|evening))/)
-  ) {
-    return `Hey! 👋 I'm Prathamesh's AI assistant. Feel free to ask me anything about his ${PRATHAMESH_CONTEXT.title} background, projects, skills, or experience! What interests you?`;
-  }
-
-  // Skills/Expertise queries
-  if (
-    lowerMessage.match(
-      /skills|expertise|good at|capable of|can ?(you|he) do|what (can|do) ?(you|he)/
-    )
-  ) {
-    if (lowerMessage.match(/ai|agents|rag|llm|language model/)) {
-      return `Prathamesh is expert in AI agents and LLMs! 🤖 He specializes in LangChain, RAG pipelines, OpenAI integration, and building production LLM applications. He built InsureLLM - a RAG agent achieving 95.7% accuracy on business queries!`;
-    }
-    if (lowerMessage.match(/machine learning|ml|deep learning|models|training/)) {
-      return `He's strong in ML! 🧠 TensorFlow, PyTorch, scikit-learn, HuggingFace - you name it. Built predictive maintenance systems, medical imaging CNNs (96% accuracy), and data-driven analytics pipelines.`;
-    }
-    if (lowerMessage.match(/computer vision|cv|image|video|detection|recognition/)) {
-      return `Computer vision is his strength! 👁️ OpenCV expert, facial recognition, pose estimation, medical imaging. Built real-time student attentiveness monitoring system reducing manual review by 70%.`;
-    }
-    if (lowerMessage.match(/backend|devops|deployment|docker|aws|production/)) {
-      return `He's a full-stack engineer! 🚀 FastAPI expert, Docker containerization, AWS deployment, CI/CD pipelines. All his projects go from prototype to production-ready systems.`;
-    }
-    return `Prathamesh excels at building full-stack production AI systems! 💪 AI Agents, ML pipelines, Computer Vision, Backend engineering, and DevOps. Which area interests you most?`;
-  }
-
-  // Project queries
-  if (lowerMessage.match(/projects?|built|work|portfolio|experience/)) {
-    if (lowerMessage.match(/insurellm|insurance|rag|knowledge|business/)) {
-      return `InsureLLM was a great RAG project! 🎯 It automated employee access to insurance policies and contracts using semantic search + re-ranking. Achieved MRR of 0.875 on 150 business test cases with 95.7% keyword coverage. Tech: LangChain, ChromaDB, GPT-4.`;
-    }
-    if (lowerMessage.match(/medinotes|medical|clinical|health|doctor|documentation/)) {
-      return `MediNotes AI is a full-cycle SaaS product! 🏥 Automates clinical documentation - doctors input notes, get AI-generated summaries, action items, and patient emails via real-time streaming. Built with FastAPI, Next.js, OpenAI, Clerk billing on AWS.`;
-    }
-    if (lowerMessage.match(/vehicle|maintenance|predictive|mlops|data drift/)) {
-      return `Vehicle Predictive Maintenance showcases MLOps! 🔧 End-to-end pipeline predicting failures with automated retraining on data drift. Uses DVC versioning, MLflow tracking, FastAPI REST API, all Dockerized on AWS.`;
-    }
-    if (lowerMessage.match(/student|attentive|education|video|monitoring/)) {
-      return `Student Attentiveness Monitor used real-time CV! 📹 Face detection + facial landmarks to assess attention during remote classes. 70% reduction in manual review time. Multi-threaded OpenCV pipeline.`;
-    }
-    return `Prathamesh has built impressive projects! 🏆 InsureLLM (RAG agent), MediNotes AI (clinical SaaS), Vehicle Predictive Maintenance (MLOps), and more. Want details on any specific project?`;
-  }
-
-  // Research/Publications
-  if (lowerMessage.match(/research|paper|published|ieee|elsevier|citation/)) {
-    return `Prathamesh is a published researcher! 📚 5 peer-reviewed papers in IEEE/Elsevier spanning healthcare AI, computer vision, and predictive analytics. His work bridges academic rigor with production systems.`;
-  }
-
-  // Education
-  if (lowerMessage.match(/education|degree|university|umd|maryland|gpa|school/)) {
-    return `Prathamesh is pursuing an MS in Applied ML at University of Maryland, College Park with a 4.0 GPA! 🎓 He's actively seeking Summer 2026 internships in AI/ML engineering roles.`;
-  }
-
-  // Experience/Background
-  if (lowerMessage.match(/experience|background|history|where|worked|location/)) {
-    return `He has global experience! 🌍 Worked across India, Singapore (NTU), and Peru (UMA) in cross-cultural ML/AI teams. Based in DC/Maryland. His diverse background gives him unique perspective on production AI systems.`;
-  }
-
-  // Contact/Hiring
-  if (lowerMessage.match(/contact|email|hire|internship|opportunity|job|reach/)) {
-    return `Great interest! 🎯 You can reach Prathamesh at ${PRATHAMESH_CONTEXT.contact} or through the Contact section below. He's actively seeking Summer 2026 internships in production ML/AI roles.`;
-  }
-
-  // Healthcare/Medical AI
-  if (lowerMessage.match(/health|medical|clinical|hospital|patient|imaging|mri/)) {
-    return `Prathamesh is passionate about Healthcare AI! 🏥 He built MediNotes AI (clinical documentation), medical imaging CNNs, and researches health informatics. His healthcare AI systems handle real-world clinical workflows.`;
-  }
-
-  // Default helpful response
-  return `That's an interesting question! 💭 I'm here to tell you about Prathamesh's AI/ML expertise, projects, research, and experience. Feel free to ask about his skills, specific projects, education, or how to work with him!`;
-};
+];
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      text: `Hey! 👋 I'm Prathamesh's Digital Twin. I have access to his background, projects, and expertise. Ask me anything about his AI/ML work, skills, projects, or experience!`,
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -170,9 +82,8 @@ export default function ChatbotWidget() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
-  // Close chat when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -189,39 +100,82 @@ export default function ChatbotWidget() {
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }
+
+    return undefined;
   }, [isOpen]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+    const trimmedMessage = inputValue.trim();
 
-    const userMessage: Message = {
+    if (!trimmedMessage || isTyping) {
+      return;
+    }
+
+    const nextUserMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: trimmedMessage,
       sender: "user",
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const nextMessages = [...messages, nextUserMessage];
+    setMessages(nextMessages);
     setInputValue("");
     setIsTyping(true);
+    setError(null);
 
-    // Generate contextual bot response
-    setTimeout(() => {
-      const botResponse = generateResponse(inputValue);
+    try {
+      const response = await fetch("/api/digital-twin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: nextMessages.map((message) => ({
+            role: message.sender === "bot" ? "assistant" : "user",
+            content: message.text,
+          })) as ChatMessage[],
+        }),
+      });
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: botResponse,
-        sender: "bot",
-        timestamp: new Date(),
-      };
+      const payload = (await response.json()) as { reply?: string; error?: string; details?: string };
 
-      setMessages((prev) => [...prev, botMessage]);
+      if (!response.ok) {
+        throw new Error(payload.error || payload.details || "Unable to reach the digital twin backend.");
+      }
+
+      setMessages((current) => [
+        ...current,
+        {
+          id: (Date.now() + 1).toString(),
+          text: payload.reply ?? "No response returned.",
+          sender: "bot",
+          timestamp: new Date(),
+        },
+      ]);
+    } catch (requestError) {
+      const fallbackMessage =
+        requestError instanceof Error
+          ? requestError.message
+          : "Something went wrong while contacting the digital twin.";
+
+      setError(fallbackMessage);
+      setMessages((current) => [
+        ...current,
+        {
+          id: (Date.now() + 1).toString(),
+          text:
+            "I could not reach the shared digital twin backend right now. Please try again in a moment.",
+          sender: "bot",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 600);
+    }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -230,7 +184,6 @@ export default function ChatbotWidget() {
 
   return (
     <>
-      {/* Chatbot Widget */}
       <div className="fixed bottom-6 right-6 z-40" ref={chatContainerRef}>
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -244,9 +197,8 @@ export default function ChatbotWidget() {
                 type: "spring",
                 stiffness: 300,
               }}
-              className="absolute bottom-20 right-0 w-[450px] h-[350px] bg-gradient-to-br from-[rgba(13,13,31,0.95)] to-[rgba(13,13,31,0.85)] backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-[rgba(0,212,255,0.3)] flex flex-col"
+              className="absolute bottom-20 right-0 w-[min(90vw,540px)] h-[350px] bg-gradient-to-br from-[rgba(13,13,31,0.95)] to-[rgba(13,13,31,0.85)] backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-[rgba(0,212,255,0.3)] flex flex-col"
             >
-              {/* Header */}
               <div className="bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] p-4 flex items-center justify-between flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/40">
@@ -257,9 +209,7 @@ export default function ChatbotWidget() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-white">
-                      Prathamesh's AI
-                    </p>
+                    <p className="text-sm font-bold text-white">Prathamesh's AI</p>
                     <p className="text-xs text-white/80">Digital Twin</p>
                   </div>
                 </div>
@@ -272,7 +222,6 @@ export default function ChatbotWidget() {
                 </button>
               </div>
 
-              {/* Messages Container */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-[rgba(0,212,255,0.3)] scrollbar-track-transparent">
                 {messages.map((message) => (
                   <motion.div
@@ -281,19 +230,26 @@ export default function ChatbotWidget() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                     className={`flex ${
-                      message.sender === "user"
-                        ? "justify-end"
-                        : "justify-start"
+                      message.sender === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
+                    {message.sender === "bot" && (
+                      <div className="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 mr-3" style={{ background: "rgba(0,212,255,0.12)", color: "#00d4ff" }}>
+                        <FiCpu size={16} />
+                      </div>
+                    )}
                     <div
-                      className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
+                      className={`max-w-[88%] px-4 py-2 rounded-2xl text-sm ${
                         message.sender === "user"
                           ? "bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] text-white rounded-br-none"
-                          : "bg-[rgba(255,255,255,0.08)] text-[rgba(255,255,255,0.9)] border border-[rgba(0,212,255,0.2)] rounded-bl-none"
+                          : "bg-[rgba(255,255,255,0.08)] text-[rgba(255,255,255,0.92)] border border-[rgba(0,212,255,0.2)] rounded-bl-none"
                       }`}
                     >
-                      {message.text}
+                      {message.sender === "bot" ? (
+                        <AssistantMarkdown content={message.text} />
+                      ) : (
+                        message.text
+                      )}
                     </div>
                   </motion.div>
                 ))}
@@ -304,32 +260,24 @@ export default function ChatbotWidget() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex justify-start"
                   >
+                    <div className="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 mr-3" style={{ background: "rgba(0,212,255,0.12)", color: "#00d4ff" }}>
+                      <FiCpu size={16} />
+                    </div>
                     <div className="bg-[rgba(255,255,255,0.08)] text-[rgba(255,255,255,0.9)] px-4 py-2 rounded-2xl rounded-bl-none border border-[rgba(0,212,255,0.2)]">
                       <div className="flex gap-1">
                         <motion.div
                           animate={{ y: [0, -4, 0] }}
-                          transition={{
-                            duration: 0.6,
-                            repeat: Infinity,
-                          }}
+                          transition={{ duration: 0.6, repeat: Infinity }}
                           className="w-2 h-2 rounded-full bg-[#00d4ff]"
                         />
                         <motion.div
                           animate={{ y: [0, -4, 0] }}
-                          transition={{
-                            duration: 0.6,
-                            delay: 0.1,
-                            repeat: Infinity,
-                          }}
+                          transition={{ duration: 0.6, delay: 0.1, repeat: Infinity }}
                           className="w-2 h-2 rounded-full bg-[#00d4ff]"
                         />
                         <motion.div
                           animate={{ y: [0, -4, 0] }}
-                          transition={{
-                            duration: 0.6,
-                            delay: 0.2,
-                            repeat: Infinity,
-                          }}
+                          transition={{ duration: 0.6, delay: 0.2, repeat: Infinity }}
                           className="w-2 h-2 rounded-full bg-[#00d4ff]"
                         />
                       </div>
@@ -337,17 +285,20 @@ export default function ChatbotWidget() {
                   </motion.div>
                 )}
 
+                {error && !isTyping && (
+                  <p className="text-xs text-red-300 px-1">{error}</p>
+                )}
+
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input Area */}
               <div className="border-t border-[rgba(0,212,255,0.2)] p-3 flex-shrink-0 bg-[rgba(0,0,0,0.2)]">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     placeholder="Ask about projects, skills..."
                     className="flex-1 bg-[rgba(255,255,255,0.08)] border border-[rgba(0,212,255,0.2)] rounded-lg px-3 py-2 text-sm text-white placeholder-[rgba(255,255,255,0.5)] focus:outline-none focus:border-[rgba(0,212,255,0.5)] focus:bg-[rgba(255,255,255,0.12)] transition-all"
                   />
@@ -357,7 +308,7 @@ export default function ChatbotWidget() {
                     className="bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] text-white p-2 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Send message"
                   >
-                    <FiSend size={18} />
+                    {isTyping ? <FiLoader className="animate-spin" size={18} /> : <FiSend size={18} />}
                   </button>
                 </div>
               </div>
@@ -365,7 +316,6 @@ export default function ChatbotWidget() {
           ) : null}
         </AnimatePresence>
 
-        {/* Floating Avatar Button */}
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -379,10 +329,8 @@ export default function ChatbotWidget() {
           className="relative group"
           aria-label="Open chatbot"
         >
-          {/* Glow effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg -z-10" />
 
-          {/* Avatar button */}
           <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#00d4ff] shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-[#00d4ff] to-[#7c3aed] p-0.5 cursor-pointer hover:scale-110">
             <img
               src="/profile.png"
@@ -391,7 +339,6 @@ export default function ChatbotWidget() {
             />
           </div>
 
-          {/* Notification badge */}
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{
@@ -401,7 +348,6 @@ export default function ChatbotWidget() {
             className="absolute top-0 right-0 w-4 h-4 bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] rounded-full border-2 border-[rgba(13,13,31,0.9)] shadow-lg"
           />
 
-          {/* Tooltip */}
           <motion.div
             initial={{ opacity: 0, x: 10 }}
             whileHover={{ opacity: 1, x: 0 }}
@@ -412,7 +358,6 @@ export default function ChatbotWidget() {
         </motion.button>
       </div>
 
-      {/* Backdrop when open */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
