@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import BootIntro from "@/components/BootIntro";
 import DigitalTwinChatClient from "@/components/DigitalTwinChatClient";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
@@ -13,6 +14,7 @@ import { FiArrowUpRight, FiMail } from "react-icons/fi";
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <BootIntro />
       <Nav />
       <ChatbotWidget />
       <main>

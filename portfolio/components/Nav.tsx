@@ -35,7 +35,7 @@ export default function Nav() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#hero" className="font-mono text-sm font-bold tracking-widest"
           style={{ color: "var(--accent-blue)" }}>
-          PU<span style={{ color: "var(--text-muted)" }}>_</span>
+          PRATHAMESH<span style={{ color: "var(--text-muted)" }}>_</span>
         </a>
 
         {/* Desktop */}

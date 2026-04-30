@@ -77,6 +77,15 @@ export default function Hero() {
             </motion.h1>
 
             <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.15 }}
+              className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--accent-blue)]"
+            >
+              Prathamesh Uravane · Portfolio Digital Twin
+            </motion.p>
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}

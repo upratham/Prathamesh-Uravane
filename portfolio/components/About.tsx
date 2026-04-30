@@ -3,6 +3,11 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { FiMapPin, FiBook, FiZap, FiGlobe } from "react-icons/fi";
 
+const orbs = [
+  { size: 320, x: "85%", y: "10%", color: "rgba(0,212,255,0.05)", delay: 0 },
+  { size: 240, x: "5%", y: "70%", color: "rgba(124,58,237,0.06)", delay: 2 },
+];
+
 const highlights = [
   {
     icon: <FiZap size={18} />,
@@ -31,8 +36,25 @@ export default function About() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="about" className="py-28 relative" ref={ref}>
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="about" className="py-28 relative overflow-hidden" ref={ref}>
+      {/* Ambient orbs */}
+      {orbs.map((orb, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full pointer-events-none float-anim"
+          style={{
+            width: orb.size,
+            height: orb.size,
+            left: orb.x,
+            top: orb.y,
+            background: `radial-gradient(circle, ${orb.color}, transparent 70%)`,
+            transform: "translate(-50%, -50%)",
+            animationDelay: `${orb.delay}s`,
+          }}
+        />
+      ))}
+
+      <div className="relative max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -102,24 +124,53 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.25 + i * 0.1 }}
-                className="glass-card rounded-xl p-5"
+                className="relative group"
               >
-                <div
-                  className="mb-3 w-9 h-9 rounded-lg flex items-center justify-center"
-                  style={{
-                    background: "rgba(0,212,255,0.1)",
-                    color: "var(--accent-blue)",
-                    border: "1px solid rgba(0,212,255,0.2)",
+                {/* Floating glow background */}
+                <motion.div
+                  animate={{
+                    opacity: [0.4, 0.8, 0.4],
                   }}
+                  transition={{
+                    duration: 3.5 + i * 0.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-0 rounded-xl bg-gradient-to-br from-[rgba(0,212,255,0.12)] via-[rgba(124,58,237,0.08)] to-transparent opacity-40 -z-10 blur-sm"
+                />
+                <div
+                  className="glass-card rounded-xl p-5 relative h-full border border-[rgba(0,212,255,0.1)] group-hover:border-[rgba(0,212,255,0.3)] transition-all"
                 >
-                  {h.icon}
+                  {/* Icon with glow */}
+                  <motion.div
+                    animate={{
+                      boxShadow: [
+                        "0 0 8px rgba(0,212,255,0.3)",
+                        "0 0 20px rgba(0,212,255,0.6)",
+                        "0 0 8px rgba(0,212,255,0.3)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 2.8 + i * 0.3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="mb-3 w-9 h-9 rounded-lg flex items-center justify-center"
+                    style={{
+                      background: "rgba(0,212,255,0.1)",
+                      color: "var(--accent-blue)",
+                      border: "1px solid rgba(0,212,255,0.2)",
+                    }}
+                  >
+                    {h.icon}
+                  </motion.div>
+                  <h3 className="font-semibold text-sm mb-2" style={{ color: "var(--foreground)" }}>
+                    {h.title}
+                  </h3>
+                  <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
+                    {h.desc}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-sm mb-2" style={{ color: "var(--foreground)" }}>
-                  {h.title}
-                </h3>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
-                  {h.desc}
-                </p>
               </motion.div>
             ))}
           </div>
