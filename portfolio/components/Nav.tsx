@@ -40,33 +40,36 @@ export default function Nav() {
 
         {/* Desktop */}
         <ul className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
+          {links.map((l, i) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="text-sm transition-colors duration-200 hover:text-[var(--accent-blue)]"
+                className="text-sm transition-all duration-200 hover:text-[var(--accent-blue)] relative group"
                 style={{ color: "var(--text-muted)" }}
               >
                 {l.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-violet)] group-hover:w-full transition-all duration-300" />
               </a>
             </li>
           ))}
           <li>
             <EmailAction
               email="upratham2002@gmail.com"
-              className="px-4 py-2 text-sm font-semibold rounded border transition-all duration-200"
+              className="px-4 py-2 text-sm font-semibold rounded border transition-all duration-200 hover:shadow-lg hover:scale-105 transform"
               style={{
                 borderColor: "var(--accent-blue)",
                 color: "var(--accent-blue)",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(0,212,255,0.1)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(0,212,255,0.15)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(0,212,255,0.3)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
             >
-              Hire Me
+              ✨ Hire Me
             </EmailAction>
           </li>
         </ul>

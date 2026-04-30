@@ -100,13 +100,14 @@ export default function Skills() {
               initial={{ opacity: 0, y: 25 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 + gi * 0.08 }}
-              className="glass-card rounded-xl p-6"
+              className="glass-card rounded-xl p-6 hover:shadow-lg transition-all duration-300 group"
+              style={{ borderColor: `${group.color}15` }}
             >
               <h3
-                className="text-xs font-semibold tracking-widest uppercase mb-5"
-                style={{ color: group.color }}
+                className="text-xs font-semibold tracking-widest uppercase mb-5 transition-colors duration-300 group-hover:text-opacity-100"
+                style={{ color: group.color, textShadow: `0 0 8px ${group.color}30` }}
               >
-                {group.category}
+                ✓ {group.category}
               </h3>
               <div className="space-y-4">
                 {group.skills.map((skill, si) => (

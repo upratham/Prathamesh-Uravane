@@ -51,14 +51,26 @@ export default function Hero() {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-16">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left */}
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+          {/* Left - Text Content */}
           <div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="mb-6"
+            >
+              <span className="section-label inline-block mb-4 px-3 py-1 rounded-full" style={{ background: "rgba(0, 212, 255, 0.1)", color: "var(--accent-blue)" }}>
+                ✨ AI Engineer · ML Researcher · Builder
+              </span>
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="section-label mb-4"
+              style={{ display: "none" }}
             >
               AI Engineer · ML Researcher · Builder
             </motion.p>
@@ -120,7 +132,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.45 }}
-              className="flex items-center gap-5"
+              className="flex items-center gap-4 flex-wrap"
             >
               {[
                 { icon: <FiLinkedin size={20} />, href: "https://linkedin.com/in/upratham", label: "LinkedIn" },
@@ -133,7 +145,7 @@ export default function Hero() {
                     key={s.label}
                     email="upratham2002@gmail.com"
                     aria-label={s.label}
-                    className="transition-all duration-200 hover:scale-110"
+                    className="social-link transition-all duration-200"
                     style={{ color: "var(--text-muted)" }}
                     onMouseEnter={(e) =>
                       ((e.currentTarget as HTMLElement).style.color = "var(--accent-blue)")
@@ -141,7 +153,7 @@ export default function Hero() {
                     onMouseLeave={(e) =>
                       ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")
                     }
-                    title="Compose email"
+                    title={s.label}
                   >
                     {s.icon}
                   </EmailAction>
@@ -152,7 +164,7 @@ export default function Hero() {
                     target={s.href.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="transition-all duration-200 hover:scale-110"
+                    className="social-link transition-all duration-200"
                     style={{ color: "var(--text-muted)" }}
                     onMouseEnter={(e) =>
                       ((e.currentTarget as HTMLElement).style.color = "var(--accent-blue)")
@@ -166,84 +178,85 @@ export default function Hero() {
                 )
               ))}
 
-              <span className="text-xs ml-2" style={{ color: "var(--text-muted)" }}>
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
                 · Open to Summer 2026 Internships
               </span>
             </motion.div>
           </div>
 
-          {/* Right — stat cards */}
-          <div className="grid grid-cols-2 gap-4">
-            {stats.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, scale: 0.85, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                className="glass-card rounded-xl p-6"
-              >
-                <div
-                  className="text-4xl font-bold mb-1"
-                  style={{ color: "var(--accent-blue)" }}
-                >
-                  {s.value}
-                  <span className="text-2xl">{s.suffix}</span>
-                </div>
-                <div className="text-xs" style={{ color: "var(--text-muted)" }}>
-                  {s.label}
-                </div>
-              </motion.div>
-            ))}
-
+          {/* Right - Profile Image & Stats */}
+          <div className="relative flex flex-col items-center gap-8">
+            {/* Profile Image with animated border */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: 20 }}
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="col-span-2 glass-card rounded-xl p-5"
+              transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
+              className="w-full max-w-2xl"
             >
-              <div className="flex items-center gap-2 mb-3">
-                <span className="glow-dot timeline-dot" />
-                <span className="text-xs font-mono" style={{ color: "var(--accent-blue)" }}>
-                  CURRENTLY BUILDING
-                </span>
+              <div className="profile-image mx-auto aspect-square max-w-2xl">
+                <img
+                  src="/profile.png"
+                  alt="Prathamesh Uravane"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
               </div>
-              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                AI agents · RAG pipelines · Production ML systems for real-world clients
-              </p>
-              <div className="flex gap-2 mt-3 flex-wrap">
-                {["LangChain", "FastAPI", "Next.js", "OpenCV"].map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs px-2 py-0.5 rounded font-mono"
-                    style={{
-                      background: "rgba(0,212,255,0.08)",
-                      color: "var(--accent-blue)",
-                      border: "1px solid rgba(0,212,255,0.2)",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+            </motion.div>
+
+            {/* Quick Stats Cards - Compact Version */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="grid grid-cols-2 gap-3 w-full"
+            >
+              {stats.map((s, i) => (
+                <div
+                  key={s.label}
+                  className="stat-card glass-card rounded-lg p-4 text-center hover:scale-105"
+                >
+                  <div className="text-2xl font-bold" style={{ color: "var(--accent-blue)" }}>
+                    {s.value}<span className="text-lg">{s.suffix}</span>
+                  </div>
+                  <div className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                    {s.label}
+                  </div>
+                </div>
+              ))}
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll cue */}
+        {/* Currently Building Section - Full Width Below */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="flex justify-center mt-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-16 max-w-2xl glass-card rounded-2xl p-6 border-l-4"
+          style={{ borderColor: "var(--accent-blue)" }}
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>scroll</span>
-            <div
-              className="w-px h-12"
-              style={{
-                background: "linear-gradient(to bottom, var(--accent-blue), transparent)",
-              }}
-            />
+          <div className="flex items-center gap-3 mb-4">
+            <span className="glow-dot timeline-dot" />
+            <span className="text-xs font-mono font-bold" style={{ color: "var(--accent-blue)" }}>
+              🚀 CURRENTLY BUILDING
+            </span>
+          </div>
+          <p className="text-base mb-4" style={{ color: "var(--text-muted)" }}>
+            AI agents · RAG pipelines · Production ML systems for real-world clients
+          </p>
+          <div className="flex gap-2 flex-wrap">
+            {["LangChain", "FastAPI", "Next.js", "OpenCV"].map((t) => (
+              <span
+                key={t}
+                className="text-xs px-3 py-1.5 rounded-full font-mono transition-all hover:scale-110"
+                style={{
+                  background: "rgba(0,212,255,0.12)",
+                  color: "var(--accent-blue)",
+                  border: "1px solid rgba(0,212,255,0.2)",
+                }}
+              >
+                {t}
+              </span>
+            ))}
           </div>
         </motion.div>
       </div>

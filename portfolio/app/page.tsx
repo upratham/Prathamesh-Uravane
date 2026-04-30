@@ -7,12 +7,14 @@ import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import ChatbotWidget from "@/components/ChatbotWidget";
 import { FiArrowUpRight, FiMail } from "react-icons/fi";
 
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <Nav />
+      <ChatbotWidget />
       <main>
         <Hero />
         <About />

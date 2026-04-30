@@ -141,7 +141,7 @@ export default function Projects() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: 0.15 + i * 0.12 }}
-              className="glass-card rounded-2xl p-7 flex flex-col"
+              className="glass-card rounded-2xl p-7 flex flex-col group hover:shadow-lg transition-all duration-300"
               style={{ borderColor: `${project.color}20` }}
             >
               <div className="flex items-start justify-between mb-5">
@@ -216,7 +216,7 @@ export default function Projects() {
               initial={{ opacity: 0, y: 25 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-              className="glass-card rounded-xl p-5 flex flex-col"
+              className="glass-card rounded-xl p-5 flex flex-col group hover:shadow-md transition-all duration-300 cursor-pointer"
             >
               <span
                 className="text-2xl font-bold font-mono opacity-20 mb-3 block"
