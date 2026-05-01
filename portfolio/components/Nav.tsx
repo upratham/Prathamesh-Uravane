@@ -9,7 +9,7 @@ const links = [
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Education", href: "#education" },
-  { label: "Digital Twin", href: "#digital-twin" },
+  { label: "Assistant", href: "#digital-twin" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -35,7 +35,7 @@ export default function Nav() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#hero" className="font-mono text-sm font-bold tracking-widest"
           style={{ color: "var(--accent-blue)" }}>
-          PRATHAMESH<span style={{ color: "var(--text-muted)" }}>_</span>
+          PRATHAMESH URAVANE
         </a>
 
         {/* Desktop */}
@@ -69,7 +69,7 @@ export default function Nav() {
                 (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
             >
-              ✨ Hire Me
+              Hire Me
             </EmailAction>
           </li>
         </ul>

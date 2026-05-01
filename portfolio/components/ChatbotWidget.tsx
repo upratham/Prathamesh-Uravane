@@ -29,14 +29,7 @@ function AssistantMarkdown({ content }: { content: string }) {
         li: ({ children }) => <li className="leading-relaxed">{children}</li>,
         strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
         em: ({ children }) => <em className="italic">{children}</em>,
-        code: ({ children }) => (
-          <code
-            className="rounded px-1.5 py-0.5 font-mono text-[0.85em]"
-            style={{ background: "rgba(0,212,255,0.08)", color: "#00d4ff" }}
-          >
-            {children}
-          </code>
-        ),
+        code: ({ children }) => <span>{children}</span>,
         h1: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
         h2: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
         h3: ({ children }) => <h4 className="m-0 text-sm font-semibold">{children}</h4>,
@@ -61,7 +54,7 @@ const initialMessages: Message[] = [
   {
     id: "1",
     text:
-      "Ask me anything about Prathamesh's career, projects, research, or target roles. I use the same Groq-powered digital twin backend as the main portfolio chat.",
+      "Ask me anything about Prathamesh's career, projects, research, or target roles. I provide concise, professional responses grounded in this portfolio.",
     sender: "bot",
     timestamp: new Date(),
   },
@@ -141,7 +134,7 @@ export default function ChatbotWidget() {
       const payload = (await response.json()) as { reply?: string; error?: string; details?: string };
 
       if (!response.ok) {
-        throw new Error(payload.error || payload.details || "Unable to reach the digital twin backend.");
+        throw new Error(payload.error || payload.details || "Unable to reach the assistant service.");
       }
 
       setMessages((current) => [
@@ -157,7 +150,7 @@ export default function ChatbotWidget() {
       const fallbackMessage =
         requestError instanceof Error
           ? requestError.message
-          : "Something went wrong while contacting the digital twin.";
+          : "Something went wrong while contacting the assistant.";
 
       setError(fallbackMessage);
       setMessages((current) => [
@@ -165,7 +158,7 @@ export default function ChatbotWidget() {
         {
           id: (Date.now() + 1).toString(),
           text:
-            "I could not reach the shared digital twin backend right now. Please try again in a moment.",
+            "I could not respond right now. Please try again in a moment.",
           sender: "bot",
           timestamp: new Date(),
         },
@@ -210,7 +203,7 @@ export default function ChatbotWidget() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-white">Prathamesh's AI</p>
-                    <p className="text-xs text-white/80">Digital Twin</p>
+                    <p className="text-xs text-white/80">Career Assistant</p>
                   </div>
                 </div>
                 <button
@@ -334,7 +327,7 @@ export default function ChatbotWidget() {
           <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#00d4ff] shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-[#00d4ff] to-[#7c3aed] p-0.5 cursor-pointer hover:scale-110">
             <img
               src="/profile.png"
-              alt="Prathamesh's Digital Twin"
+              alt="Prathamesh's Career Assistant"
               className="w-full h-full object-cover rounded-full"
             />
           </div>
@@ -353,7 +346,7 @@ export default function ChatbotWidget() {
             whileHover={{ opacity: 1, x: 0 }}
             className="absolute right-20 top-1/2 transform -translate-y-1/2 bg-[rgba(0,212,255,0.9)] text-white text-xs font-semibold px-3 py-2 rounded-lg whitespace-nowrap pointer-events-none"
           >
-            Chat with me! 💬
+            Ask a quick question
           </motion.div>
         </motion.button>
       </div>

@@ -14,6 +14,14 @@ const MODEL = "openai/gpt-oss-120b";
 
 export const runtime = "nodejs";
 
+function sanitizeAssistantReply(text: string) {
+  return text
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function getGroqApiKey() {
   // First try process.env directly (works on Vercel)
   if (process.env.GROQ_API_KEY) {
@@ -117,5 +125,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Empty response from Groq." }, { status: 502 });
   }
 
-  return NextResponse.json({ reply: content });
+  return NextResponse.json({ reply: sanitizeAssistantReply(content) });
 }

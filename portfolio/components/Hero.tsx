@@ -52,7 +52,7 @@ export default function Hero() {
               className="mb-6"
             >
               <span className="section-label inline-block mb-4 px-3 py-1 rounded-full" style={{ background: "rgba(0, 212, 255, 0.1)", color: "var(--accent-blue)" }}>
-                ✨ AI Engineer · ML Researcher · Builder
+                AI Engineer · ML Researcher · Builder
               </span>
             </motion.div>
 
@@ -75,15 +75,6 @@ export default function Hero() {
               <span className="block" style={{ color: "var(--foreground)" }}>Prathamesh</span>
               <span className="block gradient-text">Uravane</span>
             </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.15 }}
-              className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--accent-blue)]"
-            >
-              Prathamesh Uravane · Portfolio Digital Twin
-            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -237,7 +228,7 @@ export default function Hero() {
           <div className="flex items-center gap-3 mb-4">
             <span className="glow-dot timeline-dot" />
             <span className="text-xs font-mono font-bold" style={{ color: "var(--accent-blue)" }}>
-              🚀 CURRENTLY BUILDING
+              CURRENTLY BUILDING
             </span>
           </div>
           <p className="text-base mb-4" style={{ color: "var(--text-muted)" }}>

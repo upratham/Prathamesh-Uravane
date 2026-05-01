@@ -24,14 +24,7 @@ function AssistantMarkdown({ content }: { content: string }) {
         li: ({ children }) => <li className="leading-relaxed">{children}</li>,
         strong: ({ children }) => <strong className="font-semibold text-[var(--foreground)]">{children}</strong>,
         em: ({ children }) => <em className="italic">{children}</em>,
-        code: ({ children }) => (
-          <code
-            className="rounded px-1.5 py-0.5 font-mono text-[0.85em]"
-            style={{ background: "rgba(0,212,255,0.08)", color: "var(--accent-blue)" }}
-          >
-            {children}
-          </code>
-        ),
+        code: ({ children }) => <span>{children}</span>,
         h1: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
         h2: ({ children }) => <h3 className="m-0 text-base font-semibold">{children}</h3>,
         h3: ({ children }) => <h4 className="m-0 text-sm font-semibold">{children}</h4>,
@@ -56,7 +49,7 @@ const initialMessages: ChatMessage[] = [
   {
     role: "assistant",
     content:
-      "Ask me anything about my career, projects, research, or the kind of roles I am targeting. I will answer as Prathamesh's digital twin.",
+      "Ask me anything about my career, projects, research, or target roles. I will reply as your career assistant in a concise and professional style.",
   },
 ];
 
@@ -101,7 +94,7 @@ export default function DigitalTwinChat() {
       const payload = (await response.json()) as { reply?: string; error?: string; details?: string };
 
       if (!response.ok) {
-        throw new Error(payload.error || payload.details || "Unable to reach the digital twin.");
+        throw new Error(payload.error || payload.details || "Unable to reach the career assistant.");
       }
 
       setMessages((current) => [...current, { role: "assistant", content: payload.reply ?? "No response returned." }]);
@@ -113,7 +106,7 @@ export default function DigitalTwinChat() {
         {
           role: "assistant",
           content:
-            "I could not answer right now. Please check the server environment or try again in a moment.",
+            "I could not answer right now. Please try again in a moment.",
         },
       ]);
     } finally {
@@ -131,15 +124,15 @@ export default function DigitalTwinChat() {
     <section id="digital-twin" className="relative py-28">
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-16">
-          <p className="section-label mb-3">Digital Twin</p>
+          <p className="section-label mb-3">Career Assistant</p>
           <h2 className="text-4xl md:text-5xl font-bold leading-tight">
             Talk to my
-            <span className="gradient-text block">career twin.</span>
+            <span className="gradient-text block">professional assistant.</span>
           </h2>
           <p className="mt-5 max-w-2xl text-base md:text-lg leading-relaxed" style={{ color: "var(--text-muted)" }}>
             Ask questions about my work history, projects, research, or skills. This chat uses Groq with
             {" "}
-            <span style={{ color: "var(--foreground)" }}>{digitalTwinProfile.role}</span> context and replies in first person.
+            <span style={{ color: "var(--foreground)" }}>{digitalTwinProfile.role}</span> context and concise first-person replies.
           </p>
         </div>
 
@@ -150,9 +143,9 @@ export default function DigitalTwinChat() {
                 <FiCpu size={18} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">Prathamesh Digital Twin</h3>
+                <h3 className="text-lg font-semibold">Prathamesh Career Assistant</h3>
                 <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                  Groq-powered portfolio assistant
+                  Groq-powered professional assistant
                 </p>
               </div>
             </div>
@@ -274,7 +267,7 @@ export default function DigitalTwinChat() {
                 />
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                    The reply is grounded in this portfolio and Groq model output.
+                    Replies are grounded in this portfolio and generated with Groq.
                   </p>
                   <button
                     type="submit"

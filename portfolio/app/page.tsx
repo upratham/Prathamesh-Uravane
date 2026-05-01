@@ -74,7 +74,7 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-8 text-sm" style={{ color: "var(--text-muted)" }}>
               <p>Prathamesh Uravane · AI Engineer · ML Researcher</p>
-              <p>Built with Next.js, Framer Motion, and a portfolio-first layout.</p>
+              <p>Designed for clear, measurable, and recruiter-friendly storytelling.</p>
             </div>
           </div>
         </section>

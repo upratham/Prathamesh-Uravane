@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const bootLines = [
-  "> PRATHAMESH://system/boot",
-  "> INITIALIZING PORTFOLIO CORE",
-  "> LOADING AI/ML PROJECT MEMORY",
-  "> SYNCHRONIZING DIGITAL TWIN",
+  "[00:00:01] INIT/KERNEL :: PRATHAMESH-NODE",
+  "[00:00:02] MOUNT/VAULT :: PROFILE_MEMORY (SECURE)",
+  "[00:00:03] VERIFY/CERT :: PORTFOLIO_SIGNATURE",
+  "[00:00:04] SYNC/GRAPH :: EXPERIENCE_INDEX",
+  "[00:00:05] BOOT/LLM_IF :: CAREER_ASSISTANT",
+  "[00:00:06] FINAL/CHECK :: SYSTEM_STABLE",
 ];
 
 export default function BootIntro() {
@@ -18,10 +20,12 @@ export default function BootIntro() {
 
   useEffect(() => {
     const timers = [
-      window.setTimeout(() => setLineCount(2), 650),
-      window.setTimeout(() => setLineCount(3), 1250),
-      window.setTimeout(() => setLineCount(4), 1900),
-      window.setTimeout(() => setVisible(false), 3800),
+      window.setTimeout(() => setLineCount(2), 420),
+      window.setTimeout(() => setLineCount(3), 780),
+      window.setTimeout(() => setLineCount(4), 1120),
+      window.setTimeout(() => setLineCount(5), 1480),
+      window.setTimeout(() => setLineCount(6), 1840),
+      window.setTimeout(() => setVisible(false), 4600),
     ];
 
     return () => timers.forEach((timer) => window.clearTimeout(timer));
@@ -62,6 +66,11 @@ export default function BootIntro() {
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
               className="absolute bottom-[-6rem] right-[-3rem] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(124,58,237,0.18),transparent_70%)] blur-3xl"
             />
+              <motion.div
+                animate={{ opacity: [0.15, 0.32, 0.15] }}
+                transition={{ duration: 0.7, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-[repeating-linear-gradient(180deg,rgba(255,255,255,0.028)_0px,rgba(255,255,255,0.028)_1px,transparent_1px,transparent_4px)]"
+              />
           </div>
 
           <div className="relative flex min-h-screen items-center justify-center px-6">
@@ -77,7 +86,7 @@ export default function BootIntro() {
                     Prathamesh Uravane
                   </p>
                   <p className="mt-1 text-xs text-white/55">
-                    AI Engineer · ML Researcher · Digital Twin
+                    AI Engineer · ML Researcher · Portfolio
                   </p>
                 </div>
                 <button
@@ -89,10 +98,10 @@ export default function BootIntro() {
                 </button>
               </div>
 
-              <div className="grid gap-8 px-5 py-8 md:grid-cols-[1.2fr_0.8fr] md:items-center md:px-8 md:py-10">
+              <div className="grid gap-8 px-5 py-7 md:grid-cols-[1.2fr_0.8fr] md:items-center md:px-8 md:py-9">
                 <div className="space-y-5 font-mono">
-                  <p className="text-sm text-white/50">SYSTEM ONLINE</p>
-                  <div className="space-y-2 text-lg sm:text-xl md:text-2xl">
+                  <p className="text-[0.62rem] tracking-[0.26em] text-white/50">SECURE CONSOLE ACTIVE</p>
+                  <div className="space-y-1.5 text-[0.62rem] sm:text-[0.68rem] md:text-[0.72rem] tracking-[0.12em]">
                     {bootLines.slice(0, lineCount).map((line, index) => (
                       <motion.p
                         key={line}
@@ -108,7 +117,7 @@ export default function BootIntro() {
                   </div>
 
                   <div className="pt-4">
-                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.28em] text-white/45">
+                    <div className="flex items-center justify-between text-[0.58rem] uppercase tracking-[0.28em] text-white/45">
                       <span>Boot progress</span>
                       <span>{Math.round(progress)}%</span>
                     </div>
@@ -120,6 +129,28 @@ export default function BootIntro() {
                         className="h-full rounded-full bg-gradient-to-r from-[#00d4ff] via-[#7c3aed] to-[#00d4ff]"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    {["Identity", "Projects", "Experience", "Assistant", "Security"].map((item, idx) => (
+                      <div key={item} className="flex items-center gap-3 text-[0.55rem] uppercase tracking-[0.18em] text-white/60">
+                        <span className="w-24 shrink-0">{item}</span>
+                        <div className="h-1.5 flex-1 rounded-full bg-white/10 overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: lineCount > idx + 1 ? "100%" : "22%" }}
+                            transition={{ duration: 0.45, ease: "easeOut" }}
+                            className="h-full rounded-full bg-[#00d4ff]/90"
+                          />
+                        </div>
+                        <span className="w-11 text-right">{lineCount > idx + 1 ? "PASS" : "SYNC"}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="rounded-lg border border-white/10 bg-black/25 p-2.5 text-[0.53rem] uppercase tracking-[0.15em] text-white/55">
+                    <p>Threat monitor: nominal</p>
+                    <p className="mt-1">Encryption: aes-256 / channel: stable</p>
                   </div>
                 </div>
 
@@ -135,9 +166,16 @@ export default function BootIntro() {
                     className="relative flex h-48 w-48 items-center justify-center rounded-full border border-[#00d4ff]/25 bg-[radial-gradient(circle,rgba(0,212,255,0.18),rgba(13,13,31,0.85))] shadow-[0_0_50px_rgba(0,212,255,0.18)]"
                   >
                     <div className="text-center">
-                      <p className="text-xs uppercase tracking-[0.35em] text-[#00d4ff]">Twin Ready</p>
-                      <p className="mt-2 text-2xl font-semibold text-white">Prathamesh</p>
-                      <p className="mt-1 text-sm text-white/55">Loading portfolio atmosphere</p>
+                      <p className="text-[0.54rem] uppercase tracking-[0.35em] text-[#00d4ff]">Core Matrix</p>
+                      <p className="mt-2 text-base font-semibold text-white">Prathamesh</p>
+                      <p className="mt-1 text-[0.62rem] text-white/55">Compiling runtime context</p>
+                      <div className="mt-3 flex items-center justify-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff] animate-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff] animate-pulse [animation-delay:160ms]" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff] animate-pulse [animation-delay:320ms]" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff] animate-pulse [animation-delay:480ms]" />
+                      </div>
+                      <p className="mt-2 text-[0.52rem] uppercase tracking-[0.22em] text-white/45">latency 13ms</p>
                     </div>
                   </motion.div>
                 </div>

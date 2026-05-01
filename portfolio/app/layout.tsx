@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Prathamesh Uravane — AI Engineer & ML Researcher | Digital Twin",
+  title: "Prathamesh Uravane — AI Engineer & ML Researcher",
   description:
     "AI Engineer and MS in Applied ML (GPA 4.0) at University of Maryland. Building production-ready ML systems, RAG pipelines, and computer vision solutions.",
   keywords: ["AI Engineer", "Machine Learning", "Computer Vision", "NLP", "Data Science"],
